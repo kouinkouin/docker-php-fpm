@@ -1,13 +1,13 @@
 FROM kouinkouin/debian-base
 
-ARG php_version=7.1
-
-ENV APP_ENV=prod
-
 RUN wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
     echo "deb https://packages.sury.org/php/ stretch main" > /etc/apt/sources.list.d/php.list && \
     apt update 
-RUN apt install -y \
+
+ARG php_version=7.1
+
+RUN \
+    apt install -y \
         php${php_version} \
         php${php_version}-bcmath \
         php${php_version}-bz2 \
