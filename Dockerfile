@@ -38,6 +38,16 @@ RUN usermod -u 1000 www-data && \
 
 RUN php /tmp/composer-setup.php --filename=/usr/bin/composer && rm /tmp/composer-setup.php
 
+ARG is_for_production=1
+
+RUN \
+    [ $is_for_production -ne 1 ] && \
+    apt update && \
+    apt install -y php-xdebug && \
+    apt clean && \
+    rm -r /var/lib/apt/lists/* || \
+    exit 0
+ 
 CMD ["php-fpm", "-F"]
 
 EXPOSE 9000
