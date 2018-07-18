@@ -1,54 +1,40 @@
-FROM kouinkouin/debian-base
-
-RUN wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
-    echo "deb https://packages.sury.org/php/ stretch main" > /etc/apt/sources.list.d/php.list && \
-    apt update 
-
-ARG php_version=7.1
+FROM php:7.2-fpm
 
 RUN \
-    apt install -y \
-        php${php_version} \
-        php${php_version}-bcmath \
-        php${php_version}-bz2 \
-        php${php_version}-curl \
-        php${php_version}-fpm \
-        php${php_version}-gd \
-        php${php_version}-intl \
-        php${php_version}-json \
-        php${php_version}-mbstring \
-        php${php_version}-mysql \
-        php${php_version}-opcache \
-        php${php_version}-readline \
-        php${php_version}-soap \
-        php${php_version}-xml \
-        php${php_version}-xmlrpc \
-        php${php_version}-zip \
-        git \
-        && \
+    apt update
+
+RUN apt install -y \
+        # used for php ext bz2
+        libbz2-dev \
+        # used for php ext gd
+        libpng-dev libjpeg-dev \
+        # used for php ext intl
+        libicu-dev \
+        # used for php ext readline
+        #libedit-dev \
+        # used for php ext xml
+        libxml2-dev \
+    && \
     apt clean && \
     rm -r /var/lib/apt/lists/*
 
-ADD files/composer-setup.php /tmp/composer-setup.php
-
-RUN usermod -u 1000 www-data && \
-    mkdir /run/php && \
-    sed -i -r 's/^listen\ =.*$/listen = 9000/' /etc/php/${php_version}/fpm/pool.d/www.conf && \
-    ln -s php-fpm${php_version} /usr/sbin/php-fpm
-
-RUN php /tmp/composer-setup.php --filename=/usr/bin/composer && rm /tmp/composer-setup.php
-
-ARG is_for_production=1
+RUN docker-php-ext-install --help
 
 RUN \
-    [ $is_for_production -ne 1 ] && \
-    apt update && \
-    apt install -y php-xdebug && \
-    apt clean && \
-    rm -r /var/lib/apt/lists/* || \
-    exit 0
- 
-CMD ["php-fpm", "-F"]
+    docker-php-ext-install \
+        xml \
+        bcmath \
+        bz2 \
+        gd \
+        intl \
+        mysqli \
+        opcache \
+        soap \
+        xmlrpc \
+        zip \
+        -j$(nproc)
 
-EXPOSE 9000
+ADD files/composer-setup.php /tmp/composer-setup.php
+
+RUN php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm /tmp/composer-setup.php
 
