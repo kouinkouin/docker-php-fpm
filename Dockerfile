@@ -4,52 +4,59 @@ RUN wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gp
     echo "deb https://packages.sury.org/php/ stretch main" > /etc/apt/sources.list.d/php.list && \
     apt update 
 
-ARG php_version=7.1
+ENV PHP_VERSION=7.2 UID=33 GID=33
 
 RUN \
     apt install -y \
-        php${php_version} \
-        php${php_version}-bcmath \
-        php${php_version}-bz2 \
-        php${php_version}-curl \
-        php${php_version}-fpm \
-        php${php_version}-gd \
-        php${php_version}-intl \
-        php${php_version}-json \
-        php${php_version}-mbstring \
-        php${php_version}-mcrypt \
-        php${php_version}-mysql \
-        php${php_version}-opcache \
-        php${php_version}-readline \
-        php${php_version}-soap \
-        php${php_version}-xml \
-        php${php_version}-xmlrpc \
-        php${php_version}-zip \
-        git \
+        php${PHP_VERSION}-bcmath \
+        php${PHP_VERSION}-bz2 \
+        php${PHP_VERSION}-curl \
+        php${PHP_VERSION}-fpm \
+        php${PHP_VERSION}-gd \
+        php${PHP_VERSION}-intl \
+        php${PHP_VERSION}-json \
+        php${PHP_VERSION}-mbstring \
+        php${PHP_VERSION}-mysql \
+        php${PHP_VERSION}-opcache \
+        php${PHP_VERSION}-readline \
+        php${PHP_VERSION}-soap \
+        php${PHP_VERSION}-xml \
+        php${PHP_VERSION}-xmlrpc \
+        php${PHP_VERSION}-zip \
+        php-$([ "${PHP_VERSION}" = "7.2" ] && echo sodium || echo mcrypt ) \
+        gettext \
         && \
     apt clean && \
     rm -r /var/lib/apt/lists/*
 
-ADD files/composer-setup.php /tmp/composer-setup.php
-
-RUN usermod -u 1000 www-data && \
-    mkdir /run/php && \
-    sed -i -r 's/^listen\ =.*$/listen = 9000/' /etc/php/${php_version}/fpm/pool.d/www.conf && \
-    ln -s php-fpm${php_version} /usr/sbin/php-fpm
-
-RUN php /tmp/composer-setup.php --filename=/usr/bin/composer && rm /tmp/composer-setup.php
+RUN mkdir /run/php && \
+    ln -s php-fpm${PHP_VERSION} /usr/sbin/php-fpm && \
+    ln -s ${PHP_VERSION}/fpm /etc/php/fpm && \
+    echo
+#sed -i -r 's/^listen\ =.*$/listen = 9000/' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf && \
 
 ARG is_for_production=1
 
 RUN \
-    [ $is_for_production -ne 1 ] && \
-    apt update && \
-    apt install -y php-xdebug && \
-    apt clean && \
-    rm -r /var/lib/apt/lists/* || \
-    exit 0
- 
-CMD ["php-fpm", "-F"]
+    if [ $is_for_production -ne 1 ]; then \
+        apt update && \
+        apt install -y php-xdebug && \
+        apt clean && \
+        rm -r /var/lib/apt/lists/* ;\
+    fi
+
+ADD files/composer-setup.php /tmp/composer-setup.php
+
+RUN php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm /tmp/composer-setup.php
+
+ADD files/run.sh /usr/local/bin/run
+ADD files/php-fpm.d /etc/php/fpm
+
+RUN chmod +x /usr/local/bin/run
 
 EXPOSE 9000
+
+ENTRYPOINT ["run"]
+
+CMD ["php-fpm", "-F"]
 
