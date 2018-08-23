@@ -33,7 +33,6 @@ RUN mkdir /run/php && \
     ln -s php-fpm${PHP_VERSION} /usr/sbin/php-fpm && \
     ln -s ${PHP_VERSION}/fpm /etc/php/fpm && \
     echo
-#sed -i -r 's/^listen\ =.*$/listen = 9000/' /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf && \
 
 ARG is_for_production=1
 
