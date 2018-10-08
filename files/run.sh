@@ -8,7 +8,7 @@ if [ ! -f $CONF_FILE ]; then
     exit 1
 fi
 
-[ $(id -u www-data) -ne $UID -o $(id -g www-data) -ne $GID ] && usermod -u $UID -g $GID www-data
+[ $(id -u www-data) -ne $UID -o $(id -g www-data) -ne $GID ] && groupmod -g $GID www-data && usermod -u $UID www-data
 
 #GLOBAL_PARAMS="error_log=/proc/self/fd/2 access.log=/proc/self/fd/2 clear_env=no catch_workers_output=yes"
 

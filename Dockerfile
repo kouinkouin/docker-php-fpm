@@ -1,10 +1,12 @@
 FROM kouinkouin/debian-base
 
+ARG PHP_VERSION=7.2
+
 RUN wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
     echo "deb https://packages.sury.org/php/ stretch main" > /etc/apt/sources.list.d/php.list && \
-    apt update 
+    apt update
 
-ENV PHP_VERSION=7.2 UID=33 GID=33
+ENV PHP_VERSION=$PHP_VERSION UID=33 GID=33
 
 RUN \
     apt install -y \
