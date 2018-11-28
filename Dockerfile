@@ -23,6 +23,7 @@ RUN \
         php${PHP_VERSION}-opcache \
         php${PHP_VERSION}-readline \
         php${PHP_VERSION}-soap \
+        php-ssh2 \
         php${PHP_VERSION}-xml \
         php${PHP_VERSION}-xmlrpc \
         php${PHP_VERSION}-zip \
