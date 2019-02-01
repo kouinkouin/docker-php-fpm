@@ -29,6 +29,7 @@ RUN \
         php${PHP_VERSION}-zip \
         $([ "${PHP_VERSION}" = "7.2" ] && echo php-sodium || echo php${PHP_VERSION}-mcrypt ) \
         gettext \
+        pdftk \
         && \
     apt clean && \
     rm -r /var/lib/apt/lists/*
