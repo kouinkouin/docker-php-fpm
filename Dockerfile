@@ -18,7 +18,6 @@ RUN \
         php${PHP_VERSION}-intl \
         php${PHP_VERSION}-json \
         php${PHP_VERSION}-mbstring \
-        php-mongodb \
         php${PHP_VERSION}-mysql \
         php${PHP_VERSION}-opcache \
         php${PHP_VERSION}-readline \
@@ -29,7 +28,6 @@ RUN \
         php${PHP_VERSION}-zip \
         php-sodium \
         gettext \
-        pdftk \
         && \
     apt-get clean && \
     rm -r /var/lib/apt/lists/*
