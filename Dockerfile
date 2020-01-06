@@ -27,7 +27,7 @@ RUN \
         php${PHP_VERSION}-xml \
         php${PHP_VERSION}-xmlrpc \
         php${PHP_VERSION}-zip \
-        $([ "${PHP_VERSION}" = "7.2" ] && echo php-sodium || echo php${PHP_VERSION}-mcrypt ) \
+        php-sodium \
         gettext \
         pdftk \
         && \
