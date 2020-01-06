@@ -4,12 +4,12 @@ ARG PHP_VERSION=7.2
 
 RUN wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
     echo "deb https://packages.sury.org/php/ stretch main" > /etc/apt/sources.list.d/php.list && \
-    apt update
+    apt-get update
 
 ENV PHP_VERSION=$PHP_VERSION UID=33 GID=33
 
 RUN \
-    apt install -y \
+    apt-get install -y \
         php${PHP_VERSION}-bcmath \
         php${PHP_VERSION}-bz2 \
         php${PHP_VERSION}-curl \
@@ -31,7 +31,7 @@ RUN \
         gettext \
         pdftk \
         && \
-    apt clean && \
+    apt-get clean && \
     rm -r /var/lib/apt/lists/*
 
 RUN mkdir /run/php && \
@@ -43,9 +43,9 @@ ARG is_for_production=1
 
 RUN \
     if [ $is_for_production -ne 1 ]; then \
-        apt update && \
-        apt install -y php-xdebug && \
-        apt clean && \
+        apt-get update && \
+        apt-get install -y php-xdebug && \
+        apt-get clean && \
         rm -r /var/lib/apt/lists/* ;\
     fi
 
