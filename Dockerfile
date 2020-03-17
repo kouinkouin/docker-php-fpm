@@ -1,6 +1,6 @@
 FROM kouinkouin/debian-base:10
 
-ARG PHP_VERSION=7.2
+ARG PHP_VERSION=7.4
 
 RUN wget -qO /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
     echo "deb https://packages.sury.org/php/ buster main" > /etc/apt/sources.list.d/php.list && \
