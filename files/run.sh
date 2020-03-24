@@ -10,6 +10,11 @@ fi
 
 [ $(id -u www-data) -ne $UID -o $(id -g www-data) -ne $GID ] && groupmod -g $GID www-data && usermod -u $UID www-data
 
+if [ $PHP_FPM_STATUS_ENABLE -ne 0 ]; then
+    echo "[info] Enable pm.status_path = $PHP_FPM_STATUS_PATH"
+    sed -ir 's#^;?pm\.status_path\ \=\ .*$#pm.status_path = '$PHP_FPM_STATUS_PATH'#' $CONF_FILE
+fi
+
 #GLOBAL_PARAMS="error_log=/proc/self/fd/2 access.log=/proc/self/fd/2 clear_env=no catch_workers_output=yes"
 
 if [ -v GLOBAL_PARAMS ]; then
