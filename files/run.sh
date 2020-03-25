@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-CONF_FILE=/etc/php/$PHP_VERSION/fpm/pool.d/www.conf
+CONF_FILE=/etc/php/fpm/pool.d/www.conf
 
 if [ ! -f $CONF_FILE ]; then
     echo "[error] $CONF_FILE does not exist, that's not a standard situation"
@@ -12,7 +12,7 @@ fi
 
 if [ $PHP_FPM_STATUS_ENABLE -ne 0 ]; then
     echo "[info] Enable pm.status_path = $PHP_FPM_STATUS_PATH"
-    sed -ir 's#^;?pm\.status_path\ \=\ .*$#pm.status_path = '$PHP_FPM_STATUS_PATH'#' $CONF_FILE
+    sed -i -r 's#^;?pm\.status_path\ \=\ .*$#pm.status_path = '$PHP_FPM_STATUS_PATH'#' $CONF_FILE
 fi
 
 #GLOBAL_PARAMS="error_log=/proc/self/fd/2 access.log=/proc/self/fd/2 clear_env=no catch_workers_output=yes"
@@ -26,7 +26,7 @@ if [ -v GLOBAL_PARAMS ]; then
 	key=$(echo "$param" | cut -d'=' -f1)
 	value=$(echo "$param" | cut -d'=' -f2-)
 	echo "[info]   key=$key ; value=$value"
-	sed -ir 's#^'\;$key\ =.*$'#'$key' = '$value'#' $CONF_FILE
+	sed -i -r 's#^'\;$key\ =.*$'#'$key' = '$value'#' $CONF_FILE
 	[ grep -n ^$key $CONF_FILE -eq 0 ] && echo "$key = $value" >> $CONF_FILE
 	echo "[info]   "$(grep ^$key $CONF_FILE)
     done
