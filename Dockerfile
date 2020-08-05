@@ -10,6 +10,7 @@ ENV PHP_VERSION=$PHP_VERSION UID=33 GID=33 PHP_FPM_STATUS_ENABLE=0 PHP_FPM_STATU
 
 RUN \
     apt-get install -y \
+        php-amqp \
         php${PHP_VERSION}-bcmath \
         php${PHP_VERSION}-bz2 \
         php${PHP_VERSION}-curl \
