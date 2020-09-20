@@ -19,6 +19,7 @@ RUN \
         php${PHP_VERSION}-intl \
         php${PHP_VERSION}-json \
         php${PHP_VERSION}-mbstring \
+        php-mail \
         php${PHP_VERSION}-memcached \
         php${PHP_VERSION}-mysql \
         php${PHP_VERSION}-opcache \
