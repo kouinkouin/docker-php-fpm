@@ -60,7 +60,7 @@ if [ -v PHP_VALUES ]; then
 	key=$(echo "$param" | cut -d'=' -f1)
 	value=$(echo "$param" | cut -d'=' -f2-)
 	echo "[info]   key=$key ; value=$value"
-	line="php_alue[$key] = $value"
+	line="php_value[$key] = $value"
 	echo "[info]   $line"
 	echo $line >> $CONF_FILE
     done
