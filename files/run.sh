@@ -51,6 +51,23 @@ else
     echo "[info] PHP_ADMIN_VALUES not defined"
 fi
 
+if [ -v PHP_VALUES ]; then
+    echo "[info] PHP_VALUES=$PHP_VALUES"
+    # PHP_VALUES="post_max_size=8M upload_max_filesize=2M"
+    for param in $PHP_VALUES; do
+	echo "[info]  param=$param"
+	# param="post_max_size=8M"
+	key=$(echo "$param" | cut -d'=' -f1)
+	value=$(echo "$param" | cut -d'=' -f2-)
+	echo "[info]   key=$key ; value=$value"
+	line="php_alue[$key] = $value"
+	echo "[info]   $line"
+	echo $line >> $CONF_FILE
+    done
+else
+    echo "[info] PHP_VALUES not defined"
+fi
+
 if [ -v PHP_ADMIN_FLAGS ]; then
     echo "[info] PHP_ADMIN_FLAGS=$PHP_ADMIN_FLAGS"
     # PHP_ADMIN_FLAGS="log_errors=on"
