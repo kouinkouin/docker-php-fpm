@@ -26,9 +26,9 @@ if [ -v GLOBAL_PARAMS ]; then
 	key=$(echo "$param" | cut -d'=' -f1)
 	value=$(echo "$param" | cut -d'=' -f2-)
 	echo "[info]   key=$key ; value=$value"
-	sed -i -r 's#^'\;$key\ =.*$'#'$key' = '$value'#' $CONF_FILE
-	[ grep -n ^$key $CONF_FILE -eq 0 ] && echo "$key = $value" >> $CONF_FILE
-	echo "[info]   "$(grep ^$key $CONF_FILE)
+	line="$key = $value"
+	echo "[info]   $line"
+	echo $line >> $CONF_FILE
     done
 else
     echo "[info] GLOBAL_PARAMS not defined"
