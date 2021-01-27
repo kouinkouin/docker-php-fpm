@@ -10,7 +10,7 @@ ENV PHP_VERSION=$PHP_VERSION UID=33 GID=33 PHP_FPM_STATUS_ENABLE=0 PHP_FPM_STATU
 
 RUN \
     apt-get install -y \
-        php-amqp \
+        php${PHP_VERSION}-amqp \
         php${PHP_VERSION}-bcmath \
         php${PHP_VERSION}-bz2 \
         php${PHP_VERSION}-curl \
@@ -25,11 +25,11 @@ RUN \
         php${PHP_VERSION}-opcache \
         php${PHP_VERSION}-readline \
         php${PHP_VERSION}-soap \
-        php-ssh2 \
+        php-sodium \
+        php${PHP_VERSION}-ssh2 \
         php${PHP_VERSION}-xml \
         php${PHP_VERSION}-xmlrpc \
         php${PHP_VERSION}-zip \
-        php-sodium \
         gettext \
         && \
     apt-get clean && \
